@@ -53,7 +53,11 @@ public class Arena {
     private boolean canHeroMove(Position position) {
         int x = position.getX();
         int y = position.getY();
-        return x >= 1 && x < width - 1 && y >= 1 && y < height - 1;
+        for (Wall wall : walls) {
+            if (wall.getPosition().equals(position))
+                return false;
+        }
+        return true;
     }
 
     public void processKey(KeyStroke key) {
