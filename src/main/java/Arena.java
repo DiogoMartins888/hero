@@ -55,8 +55,25 @@ public class Arena {
         Random random = new Random();
         List<Coin> coins = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++)
-            coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+        for (int i = 0; i < 5; i++) {
+            int x = random.nextInt(width - 2) + 1;
+            int y = random.nextInt(height - 2) + 1;
+            Position position = new Position(x, y);
+            boolean flag = true;
+            // guarantee the coin doesn't spawn on top of the hero
+            if (hero.getPosition().equals(position)) {
+                flag = false;
+                i--;
+            }
+            // guarantee the coin doesn't spawn on top of another coin
+            for (Coin coin : coins)
+                if (coin.getPosition().equals(position)) {
+                    flag = false;
+                    i--;
+                }
+            if (flag == true)
+                coins.add(new Coin(x, y));
+        }
 
         return coins;
     }
@@ -79,8 +96,10 @@ public class Arena {
         Iterator itr = coins.iterator();
         while (itr.hasNext()) {
             Coin coin = (Coin) itr.next();
-            if (coin.getPosition().equals(position))
+            if (coin.getPosition().equals(position)) {
                 itr.remove();
+                break;
+            }
         }
     }
 
