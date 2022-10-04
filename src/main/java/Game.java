@@ -11,11 +11,11 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    Hero hero = new Hero(10, 10);
+    Arena arena = new Arena(20, 10);
 
     public Game() {
         try {
-            TerminalSize terminalSize = new TerminalSize(40, 20);
+            TerminalSize terminalSize = new TerminalSize(20, 10);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
             Terminal terminal = terminalFactory.createTerminal();
             this.screen = new TerminalScreen(terminal);
@@ -32,32 +32,12 @@ public class Game {
 
     private void draw() throws IOException {
         screen.clear();
-        hero.draw(screen);
+        arena.draw(screen);
         screen.refresh();
     }
 
-    private void moveHero(Position position) {
-        hero.setPosition(position);
-    }
-
     private void processKey(KeyStroke key) {
-        switch (key.getKeyType()) {
-            case ArrowUp:
-                moveHero(hero.moveUp());
-                break;
-            case ArrowDown:
-                moveHero(hero.moveDown());
-                break;
-            case ArrowLeft:
-                moveHero(hero.moveLeft());
-                break;
-            case ArrowRight:
-                moveHero(hero.moveRight());
-                break;
-            default:
-                break;
-        }
-
+        arena.processKey(key);
     }
 
     public void run() {
@@ -66,13 +46,12 @@ public class Game {
             while (true) {
                 KeyStroke key = screen.readInput();
                 processKey(key);
-                if (key.getKeyType() == KeyType.EOF)
+                if (key.getKeyType() == KeyType.EOF || (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q')) {
+                    screen.close();
                     break;
-                if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q')
-                    break;
+                }
                 draw();
             }
-            screen.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
