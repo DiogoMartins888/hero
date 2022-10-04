@@ -1,3 +1,7 @@
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 
@@ -6,15 +10,17 @@ import java.io.IOException;
 public class Arena {
     private int width;
     private int height;
-    Hero hero = new Hero(1, 1);
+    Hero hero = new Hero(5, 5);
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
-    public void draw(Screen screen) {
-        hero.draw(screen);
+    public void draw(TextGraphics graphics) {
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
+        hero.draw(graphics);
     }
 
     private void moveHero(Position position) {
