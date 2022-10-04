@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    Arena arena = new Arena(50, 25);
+    private Arena arena = new Arena(50, 25);
 
     public Game() {
         try {

@@ -6,21 +6,43 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Arena {
     private int width;
     private int height;
-    Hero hero = new Hero(5, 5);
+    private Hero hero = new Hero(5, 5);
+    private List<Wall> walls;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
+        this.walls = createWalls();
     }
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
+        for (Wall wall : walls)
+            wall.draw(graphics);
         hero.draw(graphics);
+    }
+
+    private List<Wall> createWalls() {
+        List<Wall> walls = new ArrayList<>();
+
+        for (int c = 0; c < width; c++) {
+            walls.add(new Wall(c, 0));
+            walls.add(new Wall(c, height - 1));
+        }
+
+        for (int r = 1; r < height - 1; r++) {
+            walls.add(new Wall(0, r));
+            walls.add(new Wall(width - 1, r));
+        }
+
+        return walls;
     }
 
     private void moveHero(Position position) {
@@ -31,7 +53,7 @@ public class Arena {
     private boolean canHeroMove(Position position) {
         int x = position.getX();
         int y = position.getY();
-        return x >= 0 && x < width && y >= 0 && y < height;
+        return x >= 1 && x < width - 1 && y >= 1 && y < height - 1;
     }
 
     public void processKey(KeyStroke key) {

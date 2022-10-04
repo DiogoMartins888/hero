@@ -6,7 +6,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 
 public class Hero {
-    Position position;
+    private Position position;
 
     public Hero(int x, int y) {
         position = new Position(x, y);
