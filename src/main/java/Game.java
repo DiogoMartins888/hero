@@ -39,8 +39,8 @@ public class Game {
         screen.refresh();
     }
 
-    private void processKey(KeyStroke key) {
-        arena.processKey(key);
+    private boolean processKey(KeyStroke key) {
+        return arena.processKey(key);
     }
 
     public void run() {
@@ -48,8 +48,7 @@ public class Game {
             draw();
             while (true) {
                 KeyStroke key = screen.readInput();
-                processKey(key);
-                if (key.getKeyType() == KeyType.EOF || (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q')) {
+                if (processKey(key)) {
                     screen.close();
                     break;
                 }

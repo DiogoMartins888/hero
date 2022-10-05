@@ -7,9 +7,7 @@ import com.googlecode.lanterna.screen.Screen;
 
 public class Hero extends Element {
 
-    public Hero(int x, int y) {
-        super(x, y);
-    }
+    public Hero(int x, int y) { super(x, y); }
 
     public Position moveUp() {
         return new Position(position.getX(), position.getY() - 1);

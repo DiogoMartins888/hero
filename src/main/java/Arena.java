@@ -17,12 +17,14 @@ public class Arena {
     private Hero hero = new Hero(5, 5);
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
     }
 
     public void draw(TextGraphics graphics) {
@@ -33,6 +35,8 @@ public class Arena {
         hero.draw(graphics);
         for (Coin coin : coins)
             coin.draw(graphics);
+        for (Monster monster : monsters)
+            monster.draw(graphics);
     }
 
     private List<Wall> createWalls() {
@@ -78,6 +82,39 @@ public class Arena {
         return coins;
     }
 
+    private List<Monster> createMonsters() {
+        Random random = new Random();
+        List<Monster> monsters = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            int x = random.nextInt(width - 2) + 1;
+            int y = random.nextInt(height - 2) + 1;
+            Position position = new Position(x, y);
+            boolean flag = true;
+            // guarantee the monster doesn't spawn on top of the hero
+            if (hero.getPosition().equals(position)) {
+                flag = false;
+                i--;
+            }
+            // guarantee the monster doesn't spawn on top of a coin
+            for (Coin coin : coins)
+                if (coin.getPosition().equals(position)) {
+                    flag = false;
+                    i--;
+                }
+            // guarantee the monster doesn't spawn on top of another monster
+            for (Monster monster : monsters)
+                if (monster.getPosition().equals(position)) {
+                    flag = false;
+                    i--;
+                }
+            if (flag == true)
+                monsters.add(new Monster(x, y));
+        }
+
+        return monsters;
+    }
+
     private void moveHero(Position position) {
         retrieveCoins(position);
         if (canHeroMove(position))
@@ -85,10 +122,9 @@ public class Arena {
     }
 
     private boolean canHeroMove(Position position) {
-        for (Wall wall : walls) {
+        for (Wall wall : walls)
             if (wall.getPosition().equals(position))
                 return false;
-        }
         return true;
     }
 
@@ -103,22 +139,66 @@ public class Arena {
         }
     }
 
-    public void processKey(KeyStroke key) {
+    private boolean verifyMonsterCollision(Position position) {
+        for (Monster monster : monsters)
+            if (monster.getPosition().equals(position)) {
+                System.out.println("Game Over");
+                return true;
+            }
+        return false;
+    }
+
+    private void moveMonsters() {
+        for (Monster monster : monsters) {
+            Position position = monster.move();
+            if (canMonsterMove(position))
+                monster.setPosition(position);
+        }
+    }
+
+    private boolean canMonsterMove(Position position) {
+        for (Wall wall : walls)
+            if (wall.getPosition().equals(position))
+                return false;
+        for (Coin coin : coins)
+            if (coin.getPosition().equals(position))
+                return false;
+        return true;
+    }
+
+    public boolean processKey(KeyStroke key) {
         switch (key.getKeyType()) {
             case ArrowUp:
                 moveHero(hero.moveUp());
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
+                moveMonsters();
                 break;
             case ArrowDown:
                 moveHero(hero.moveDown());
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
+                moveMonsters();
                 break;
             case ArrowLeft:
                 moveHero(hero.moveLeft());
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
+                moveMonsters();
                 break;
             case ArrowRight:
                 moveHero(hero.moveRight());
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
+                moveMonsters();
                 break;
+            case EOF:
+                return true;
+            case Character:
+                return key.getCharacter() == 'q';
             default:
                 break;
         }
+        return false;
     }
 }
