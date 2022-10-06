@@ -9,14 +9,9 @@ public class Monster extends Element {
 
     public Position move() {
         Random random = new Random();
-        int x = random.nextInt(2);
-        int y = random.nextInt(2);
-        if (x == 0)
-            x = -1;
-        if (y == 0)
-            y = -1;
-        Position position = new Position(getPosition().getX() + x, getPosition().getY() + y);
-
+        Position[] positions = new Position[]{ new Position(0, 1), new Position(0, -1), new Position(1, 0), new Position(-1, 0)};
+        int r = random.nextInt(4);
+        Position position = getPosition().add(positions[r]);
         return position;
     }
 

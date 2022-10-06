@@ -173,24 +173,32 @@ public class Arena {
                 if (verifyMonsterCollision(hero.getPosition()))
                     return true;
                 moveMonsters();
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
                 break;
             case ArrowDown:
                 moveHero(hero.moveDown());
                 if (verifyMonsterCollision(hero.getPosition()))
                     return true;
                 moveMonsters();
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
                 break;
             case ArrowLeft:
                 moveHero(hero.moveLeft());
                 if (verifyMonsterCollision(hero.getPosition()))
                     return true;
                 moveMonsters();
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
                 break;
             case ArrowRight:
                 moveHero(hero.moveRight());
                 if (verifyMonsterCollision(hero.getPosition()))
                     return true;
                 moveMonsters();
+                if (verifyMonsterCollision(hero.getPosition()))
+                    return true;
                 break;
             case EOF:
                 return true;

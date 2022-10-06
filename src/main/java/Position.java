@@ -23,6 +23,11 @@ public class Position {
         this.y = y;
     }
 
+    public Position add(Position position) {
+        Position result = new Position(x + position.x, y + position.y);
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
