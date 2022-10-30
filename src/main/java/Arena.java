@@ -14,7 +14,7 @@ import java.util.Random;
 public class Arena {
     private int width;
     private int height;
-    private Hero hero = new Hero(5, 5);
+    private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
     private List<Monster> monsters;
@@ -22,9 +22,34 @@ public class Arena {
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
+        this.hero = new Hero(width / 2, height / 2);
         this.walls = createWalls();
         this.coins = createCoins();
         this.monsters = createMonsters();
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public Hero getHero() {
+        return this.hero;
+    }
+
+    public List<Wall> getWalls() {
+        return this.walls;
+    }
+
+    public List<Coin> getCoins() {
+        return this.coins;
+    }
+
+    public List<Monster> getMonsters() {
+        return this.monsters;
     }
 
     public void draw(TextGraphics graphics) {
